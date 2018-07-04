@@ -3,6 +3,7 @@ Django==2.0.7
 django-filter==1.1.0
 djangorestframework==3.8.2
 Markdown==2.6.11
+Pillow==5.2.0
 pytz==2018.5
 qrcode==6.0
 six==1.11.0

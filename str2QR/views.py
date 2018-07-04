@@ -8,6 +8,9 @@ from django.http import HttpResponse
 
 from hashlib import sha256
 import json
+import qrcode
+import os
+
 
 class RetMsg(object):
     code = 200
@@ -16,7 +19,6 @@ class RetMsg(object):
 
     def __init__(self):
         self.data = {}
-
 
 
 def ret_2_json(ret):
@@ -39,13 +41,18 @@ def qr(request):
         return HttpResponse(s)
 
     #else:
-    ret.data['qr_url'] = "qq.com"
+
     ret.data['content'] = qrstring
 
     h = sha256()
     h.update(qrstring.encode('utf-8'))
     res = h.hexdigest()
     ret.data['hash'] = res
+    ret.data['qr_url'] = "/static/{}.png".format(ret.data['hash'])
+    img_qr = qrcode.make(qrstring)
+
+    img_qr_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),"img_qr")
+    img_qr.save(os.path.join(img_qr_dir,"{}.png".format(ret.data['hash'])))
 
     s = json.dumps(ret, default=ret_2_json)
 
